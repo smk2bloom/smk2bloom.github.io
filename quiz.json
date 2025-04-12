@@ -1,0 +1,19 @@
+{
+    "quiz1": [
+        {
+            "question": "Apa ibukota Indonesia?",
+            "options": ["Jakarta", "Bandung", "Surabaya", "Medan"],
+            "correct": 0
+        },
+        {
+            "question": "2 + 2 × 2 = ?",
+            "options": ["6", "8", "4", "2"],
+            "correct": 0
+        },
+        {
+            "question": "Planet terdekat dari matahari?",
+            "options": ["Venus", "Mars", "Merkurius", "Bumi"],
+            "correct": 2
+        }
+    ]
+}

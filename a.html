@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+        }
+        #quiz-container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Simple Quiz</h1>
+    <div id="quiz-container">Loading quiz...</div>
+
+    <script>
+    let quizData = [];
+    let currentQuestion = 0;
+    let score = 0;
+
+    // Langkah 1: Load data quiz dari file JSON
+    fetch('quiz.json')
+        .then(response => response.json())
+        .then(data => {
+            quizData = data.quiz1;
+            renderQuestion();
+        })
+        .catch(error => console.error('Error loading quiz:', error));
+
+    // Langkah 2: Render pertanyaan ke layar
+    function renderQuestion() {
+        const q = quizData[currentQuestion];
+        let html = `<h3>Pertanyaan ${currentQuestion + 1}: ${q.question}</h3>`;
+        q.options.forEach((opt, idx) => {
+            html += `<button onclick="checkAnswer(${idx})">${opt}</button>`;
+        });
+        document.getElementById('quiz-container').innerHTML = html;
+    }
+
+    // Langkah 3: Cek jawaban yang dipilih
+    function checkAnswer(selectedIdx) {
+        if(selectedIdx === quizData[currentQuestion].correct) {
+            score++;
+        }
+        currentQuestion++;
+        
+        // Langkah 4: Tampilkan pertanyaan berikutnya atau hasil akhir
+        if(currentQuestion < quizData.length) {
+            renderQuestion();
+        } else {
+            showResult();
+        }
+    }
+
+    // Langkah 5: Tampilkan hasil akhir
+    function showResult() {
+        const result = `
+            <h3>Hasil Kuis!</h3>
+            <p>Skor Anda: ${score}/${quizData.length}</p>
+            <p>Persentase: ${(score/quizData.length*100).toFixed(1)}%</p>
+            <button onclick="location.reload()">Coba Lagi</button>
+        `;
+        localStorage.setItem('quiz1-score', score);
+        document.getElementById('quiz-container').innerHTML = result;
+    }
+    </script>
+</body>
+</html>
