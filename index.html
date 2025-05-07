@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="source/a.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</head>
+<body>
+    <div class="header" id="header">
+        <div class="header-home">
+          <a href="index.html"><img src="source/material/hom.png" class="header-home-picture"></img></a>
+        </div>
+        <div class="sapa">
+            <div>
+                <a href="javascript:void(0);" 
+                id="login-link" 
+                class="header-login1" 
+                onclick="loginWithGoogle()">
+                    Log In </a>   
+                <p id="login-link1" class="header-login2">
+                to saving journey</p>
+            </div>
+            <div id="greeting" class="header-greeting">
+                Hello, <span id="user-name"></span>!
+            </div>
+        </div>
+        <div>
+          <a href="index.html"><img src="source/material/blog.png" class="header-blog-picture"></img></a>
+        </div>
+        <div>
+          <a href="index.html"><img src="source/material/bok.png" class="header-bok-picture"></img></a>
+        </div>
+        <div class="header-link">
+          <a href="index.html"><img src="source/material/link.png" class="header-link-picture"></img></a>
+        </div>
+    
+    </div> <!-- Penutup header di luar komentar -->
+    <nav >
+        <ul class="menu-list">
+          <li class="menu-item" aria-haspopup="true">
+            <a class="menu-link">SMA</a>
+            <div class="dropdown" aria-label="Submenu SMA">
+              <ul class="submenu">
+                <li class="submenu-item">
+                  <a href="/smk-a" class="submenu-link">SMK A</a>
+                </li>
+                <li class="submenu-item">
+                  <a href="/sma-international" class="submenu-link">SMA International1</a>
+                </li>
+                <li class="submenu-item">
+                  <a href="/sma-international" class="submenu-link">SMA International2</a>
+                </li>
+                <li class="submenu-item">
+                  <a href="/sma-international" class="submenu-link">SMA International3</a>
+                </li>
+              </ul>
+            </div>
+          </li>
+            <li class="menu-item" aria-haspopup="true">
+                <a class="menu-link">SMK</a>
+                <div class="dropdown" aria-label="Submenu SMK">
+                <ul class="submenu">
+                    <li class="submenu-item">
+                    <a href="/smk-b" class="submenu-link">I SMK I MECHANIC'S</a>
+                    </li>
+                    <li class="submenu-item">
+                    <a href="/smk-international" class="submenu-link">I SMK I INFORMATIC'S</a>
+                    </li>
+                    <li class="submenu-item">
+                      <a href="/sma-international" class="submenu-link">I SMK I ELEKTRONIC'S</a>
+                    </li>
+                </ul>
+                </div>
+        </ul>
+    </nav>
+    <div class="isi1">
+        <div class="isi1_">
+          <p data-aos="fade-right" class="isi1_p">This website collaborates with a few of students to evaluate learning outcomes.</p>
+          <img data-aos="fade-left" src="source/material/people.png" class="isi1_img"></img>
+        </div>
+    </div>
+    <div  class="isi2" >
+       <div class="isi2_">
+          <p data-aos="fade-right" class="isi2_p">use this website to learning what we have learned,and if you have knowledge that can help others, grab my hand and come with us hehe~.</p>
+          <img data-aos="fade-left" src="source/material/task.png" class="isi2_img"></img>
+        </div>
+    </div>
+    <!--
+    <div class="container">
+      <div class="column">
+
+        <div data-aos="fade-right" class="">
+            <div class="">Judul Pertama</div>
+            <div class="">
+                <div class="">
+                    <div class=""></div>
+                    <div class=""></div>
+                </div>
+                <div class=""></div>
+            </div>
+            <div class="">
+                Deskripsi singkat tentang item pertama pada timeline ini. Jelaskan detail penting yang perlu diketahui.
+            </div>
+        </div>
+        <div data-aos="fade-right" class="">
+            <div class="">Judul Pertama</div>
+            <div class="">
+                <div class="">
+                    <div class=""></div>
+                    <div class=""></div>
+                </div>
+                <div class=""></div>
+            </div>
+            <div class="">
+                Deskripsi singkat tentang item pertama pada timeline ini. Jelaskan detail penting yang perlu diketahui.
+            </div>
+        </div>
+        <div data-aos="fade-right" class="">
+            <div class="">Judul Pertama</div>
+            <div class="">
+                <div class="">
+                    <div class=""></div>
+                    <div class=""></div>
+                </div>
+                <div class=""></div>
+            </div>
+            <div class="">
+                Deskripsi singkat tentang item pertama pada timeline ini. Jelaskan detail penting yang perlu diketahui.
+            </div>
+        </div>
+
+      </div>
+      <div class="">
+        <div class="dot-top"></div>
+        <div class="vertical-line">
+        <div class="dot-bottom"></div>
+        </div>
+      </div>
+      <div class="column">
+        <div data-aos="fade-right" class="">
+            <div class="">Judul Pertama</div>
+            <div class="">
+                <div class="">
+                    <div class=""></div>
+                    <div class=""></div>
+                </div>
+                <div class=""></div>
+            </div>
+            <div class="">
+                Deskripsi singkat tentang item pertama pada timeline ini. Jelaskan detail penting yang perlu diketahui.
+            </div>
+        </div>
+        <div data-aos="fade-right" class="">
+            <div class="">Judul Pertama</div>
+            <div class="">
+                <div class="">
+                    <div class=""></div>
+                    <div class=""></div>
+                </div>
+                <div class=""></div>
+            </div>
+            <div class="">
+                Deskripsi singkat tentang item pertama pada timeline ini. Jelaskan detail penting yang perlu diketahui.
+            </div>
+        </div>
+        <div data-aos="fade-right" class="">
+            <div class="">Judul Pertama</div>
+            <div class="">
+                <div class="">
+                    <div class=""></div>
+                    <div class=""></div>
+                </div>
+                <div class=""></div>
+            </div>
+            <div class="">
+                Deskripsi singkat tentang item pertama pada timeline ini. Jelaskan detail penting yang perlu diketahui.
+            </div>
+        </div>
+      </div>
+    </div>-->
+    <div class="isi3">
+      <div class="vertical-line-container">
+        <div class="vertical-line"></div>
+        <div class="dot dot-top"></div>
+        <div class="dot dot-bottom"></div>
+        
+        <div class="timeline-items">
+            <div data-aos="fade-right" class="timeline-item left">
+                <div class="item-title">Judul Pertama</div>
+                <div class="horizontal-line-container">
+                    <div class="horizontal-line">
+                        <div class="horizontal-dot start"></div>
+                        <div class="horizontal-dot end"></div>
+                    </div>
+                    <div class="connector-line"></div>
+                </div>
+                <div class="item-description">
+                    Deskripsi singkat tentang item pertama pada timeline ini. Jelaskan detail penting yang perlu diketahui.
+                </div>
+            </div>
+            
+            <!-- Item 2 (Kanan) -->
+            <div class="timeline-item right">
+                <div class="item-title">Judul Kedua</div>
+                <div class="horizontal-line-container">
+                    <div class="horizontal-line">
+                        <div class="horizontal-dot end"></div>
+                    </div>
+                    <div class="connector-line"></div>
+                </div>
+                <div class="item-description">
+                    Deskripsi singkat tentang item kedua pada timeline ini. Jelaskan detail penting yang perlu diketahui.
+                </div>
+            </div>
+            
+            <!-- Item 3 (Kiri) -->
+            <div data-aos="fade-right" class="timeline-item left">
+                <div class="item-title">Judul Ketiga</div>
+                <div class="horizontal-line-container">
+                    <div class="horizontal-line">
+                        <div class="horizontal-dot start"></div>
+                        <div class="horizontal-dot end"></div>
+                    </div>
+                    <div class="connector-line"></div>
+                </div>
+                <div class="item-description">
+                    Deskripsi singkat tentang item ketiga pada timeline ini. Jelaskan detail penting yang perlu diketahui.
+                </div>
+            </div>
+        </div>
+      </div>
+      
+    </div>
+        
+    <div class="isi_footer1"></div>
+    <div class="isi_footer2">
+        <img src="source/material/footer.png" alt="Image" class="isi_footer2_img">
+    </div>
+    <div class="footer" id="footer">
+        <h1 class="footer_h1">The End?</h1>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="source/a.js"></script>
+    <script>
+      AOS.init();
+    </script>
+</body>
+</html>
