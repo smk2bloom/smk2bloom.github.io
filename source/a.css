@@ -227,7 +227,17 @@
   align-items: center;
   margin: 0;
 }
+.isi1, .isi2, .isi3 {
+    position: relative;
+    z-index: 2; /* Pastikan konten di atas canvas */
+    background: rgba(0,0,0,0.7); /* Tambahkan background semi-transparan */
+}
 
+#particleCanvas {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+}
 
 
 
