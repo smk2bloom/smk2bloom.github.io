@@ -19,30 +19,58 @@ menuItems.forEach(item => {
   });
 });
 
-/*
-// Inisialisasi Google Sign-In
-function handleCredentialResponse(response) {
-  const data = jwt_decode(response.credential);
-  const email = data.email;
-  const name = email.split('@')[0]; // Ambil nama sebelum '@'
+/*// Hapus kode yang di-comment dan ganti dengan ini:
 
-  // Tampilkan sapaan
-  document.getElementById('login-container').style.display = 'none';
-  const greeting = document.getElementById('greeting');
-  document.getElementById('user-name').textContent = name;
-  greeting.style.display = 'block';
+const firebaseConfig = {
+  apiKey: "AIzaSyCLql1TJWQG85bagDvZVEQpYukxkvx-P6g",
+  authDomain: "smk2bloom.firebaseapp.com",
+  projectId: "smk2bloom",
+  storageBucket: "smk2bloom.firebasestorage.app",
+  messagingSenderId: "383311108717",
+  appId: "1:383311108717:web:9661de6ac3631d081afd64",
+  measurementId: "G-CY99D63FMW"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
+function handleCredentialResponse(response) {
+  const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
+  
+  firebase.auth().signInWithCredential(credential)
+    .then((result) => {
+      const user = result.user;
+      document.getElementById('login-link').style.display = 'none';
+      document.getElementById('login-link1').style.display = 'none';
+      document.getElementById('greeting').style.display = 'block';
+      document.getElementById('user-name').textContent = user.displayName || user.email.split('@')[0];
+    })
+    .catch((error) => {
+      console.error('Login error:', error);
+    });
 }
 
-// Tambahkan Google Sign-In Button
-window.onload = function () {
+function initializeGoogleSignIn() {
   google.accounts.id.initialize({
-      client_id: 'YOUR_GOOGLE_CLIENT_ID', // Ganti dengan Client ID Anda
-      callback: handleCredentialResponse
+    client_id: 'YOUR_GOOGLE_CLIENT_ID', // Ganti dengan Client ID Anda
+    callback: handleCredentialResponse,
+    auto_select: false,
+    cancel_on_tap_outside: true
   });
+  
+  google.accounts.id.renderButton(
+    document.getElementById('login-link'),
+    {
+      type: 'icon',
+      shape: 'circle',
+      theme: 'filled_blue',
+      size: 'medium',
+      text: 'signin_with'
+    }
+  );
+}
 
-  // Pasang event listener pada link
-  document.getElementById('login-link').addEventListener('click', function (e) {
-      e.preventDefault(); // Mencegah reload halaman
-      google.accounts.id.prompt(); // Memunculkan prompt login Google
-  });
-};
+// Panggil inisialisasi setelah DOM siap
+document.addEventListener('DOMContentLoaded', function() {
+  initializeGoogleSignIn();
+});
