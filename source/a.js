@@ -177,3 +177,7 @@ function animate() {
     
     requestAnimationFrame(animate);
 }
+window.addEventListener('resize', () => {
+    resizeCanvas();
+    nodes = createNodes(); // Reset node positions
+});
