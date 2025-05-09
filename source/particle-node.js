@@ -1,31 +1,50 @@
-const menuItems = document.querySelectorAll('.menu-item');
-menuItems.forEach(item => {
-  // Mouse interaction
-  item.addEventListener('mouseenter', () => {
-    item.querySelector('.dropdown').style.display = 'block';
-  });
+// Particle Node Network Effect - DRY Version
+document.addEventListener('DOMContentLoaded', function() {
+  // Menu functionality
+  initMenuInteractions();
   
-  item.addEventListener('mouseleave', () => {
-    item.querySelector('.dropdown').style.display = 'none';
-  });
-
-  // Keyboard accessibility
-  item.addEventListener('focusin', () => {
-    item.querySelector('.dropdown').style.display = 'block';
-  });
-
-  item.addEventListener('focusout', () => {
-    item.querySelector('.dropdown').style.display = 'none';
-  });
+  // Create and setup canvas
+  setupCanvas();
+  
+  // Initialize particle network
+  initParticleNetwork();
 });
 
-// Create canvas element for particle network
-document.addEventListener('DOMContentLoaded', function() {
+// Initialize menu item interactions
+function initMenuInteractions() {
+  const menuItems = document.querySelectorAll('.menu-item');
+  
+  menuItems.forEach(item => {
+    // Mouse interaction
+    item.addEventListener('mouseenter', () => {
+      item.querySelector('.dropdown').style.display = 'block';
+    });
+    
+    item.addEventListener('mouseleave', () => {
+      item.querySelector('.dropdown').style.display = 'none';
+    });
+
+    // Keyboard accessibility
+    item.addEventListener('focusin', () => {
+      item.querySelector('.dropdown').style.display = 'block';
+    });
+
+    item.addEventListener('focusout', () => {
+      item.querySelector('.dropdown').style.display = 'none';
+    });
+  });
+}
+
+// Canvas and global variables
+let canvas, ctx, nodes, mouse, lastScrollY = 0;
+
+// Setup canvas element
+function setupCanvas() {
   // Insert canvas after header and before content
   const header = document.querySelector('.header');
   const nav = document.querySelector('nav');
   
-  const canvas = document.createElement('canvas');
+  canvas = document.createElement('canvas');
   canvas.id = 'particleCanvas';
   canvas.style.position = 'absolute';
   canvas.style.top = (header.offsetHeight + nav.offsetHeight) + 'px';
@@ -38,200 +57,232 @@ document.addEventListener('DOMContentLoaded', function() {
   // Insert the canvas after the nav element
   nav.after(canvas);
   
-  // Initialize particle network
-  initParticleNetwork();
-});
-
-function initParticleNetwork() {
-  const canvas = document.getElementById('particleCanvas');
-  const ctx = canvas.getContext('2d');
+  // Initialize canvas context
+  ctx = canvas.getContext('2d');
   
-  function resizeCanvas() {
-    const header = document.querySelector('.header');
-    const nav = document.querySelector('nav');
-    const footer = document.querySelector('.isi_footer1');
-    
-    // Dapatkan posisi absolut header dan footer
-    const headerBottom = header.offsetTop + header.offsetHeight + nav.offsetHeight;
-    const footerTop = footer.offsetTop;
-    
-    // Hitung tinggi canvas yang diperlukan
-    const canvasHeight = footerTop - headerBottom;
-    
-    // Update dimensi canvas
-    canvas.width = window.innerWidth;
-    canvas.height = Math.max(canvasHeight, 100); // Minimal 100px
-    canvas.style.top = `${headerBottom}px`;
-    canvas.style.height = `${canvasHeight}px`;
-    
-    // Perbarui posisi mouse
-    const canvasRect = canvas.getBoundingClientRect();
-    canvas.offsetTopGlobal = canvasRect.top + window.scrollY;
-    canvas.offsetLeftGlobal = canvasRect.left + window.scrollX;
-}
-
-// Tambahkan event listener untuk scroll dan resize
-window.addEventListener('scroll', resizeCanvas);
-window.addEventListener('resize', resizeCanvas);
-  
-  resizeCanvas();
-  window.addEventListener('resize', resizeCanvas);
-  
-  // Mouse interaction
-  const mouse = {
+  // Initialize mouse object
+  mouse = {
     x: undefined,
     y: undefined,
     radius: 100,
     mode: 'collect' // 'collect' or 'disperse'
   };
   
-  canvas.addEventListener('mousemove', function(event) {
-    mouse.x = event.x;
-    mouse.y = event.y - (document.querySelector('.header').offsetHeight + document.querySelector('nav').offsetHeight);
-  });
+  // Setup event listeners
+  setupEventListeners();
   
-  canvas.addEventListener('click', function() {
-    mouse.mode = mouse.mode === 'collect' ? 'disperse' : 'collect';
-  });
+  // Set initial canvas dimensions
+  resizeCanvas();
+}
+
+// Setup all event listeners
+function setupEventListeners() {
+  // Mouse move handling
+  canvas.addEventListener('mousemove', handleMouseMove);
   
-  // Node class
-  class Node {
-    constructor(x, y, size) {
-      this.x = x;
-      this.y = y;
-      this.size = size;
-      this.baseX = x;
-      this.baseY = y;
-      this.dx = (Math.random() * 2) - 1;
-      this.dy = (Math.random() * 2) - 1;
-    }
+  // Mouse click to toggle mode
+  canvas.addEventListener('click', toggleMouseMode);
   
-    draw() {
-      ctx.fillStyle = 'white';
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-      ctx.closePath();
-      ctx.fill();
-    }
+  // Window resize handling with debounce
+  window.addEventListener('resize', handleResize);
   
-    update() {
-      if (this.x + this.size > canvas.width || this.x - this.size < 0) {
-        this.dx *= -1;
-      }
+  // Scroll event for optimization
+  window.addEventListener('scroll', handleScroll);
+}
+
+// Handle mouse movement
+function handleMouseMove(event) {
+  const header = document.querySelector('.header');
+  const nav = document.querySelector('nav');
   
-      if (this.y + this.size > canvas.height || this.y - this.size < 0) {
-        this.dy *= -1;
-      }
-  
-      this.x += this.dx;
-      this.y += this.dy;
-  
-      if (mouse.x && mouse.y) {
-        if (mouse.mode === 'collect') {
-          let dx = mouse.x - this.x;
-          let dy = mouse.y - this.y;
-          let distance = Math.sqrt(dx * dx + dy * dy);
-  
-          if (distance < mouse.radius) {
-            let angle = Math.atan2(dy, dx);
-            let tx = mouse.x + Math.cos(angle) * mouse.radius;
-            let ty = mouse.y + Math.sin(angle) * mouse.radius;
-  
-            this.dx = (tx - this.x) * 0.1;
-            this.dy = (ty - this.y) * 0.1;
-          }
-        } else if (mouse.mode === 'disperse') {
-          let dx = this.x - mouse.x;
-          let dy = this.y - mouse.y;
-          let distance = Math.sqrt(dx * dx + dy * dy);
-  
-          if (distance < mouse.radius * 2) {
-            let angle = Math.atan2(dy, dx);
-            let tx = mouse.x + Math.cos(angle) * (mouse.radius * 2);
-            let ty = mouse.y + Math.sin(angle) * (mouse.radius * 2);
-  
-            this.dx = (tx - this.x) * 0.1;
-            this.dy = (ty - this.y) * 0.1;
-          }
-        }
-      }
-  
-      // Ensure the nodes keep moving by adding a small random value
-      this.dx += (Math.random() * 0.1) - 0.05;
-      this.dy += (Math.random() * 0.1) - 0.05;
-      
-      // Limit maximum speed
-      this.dx = Math.max(-2, Math.min(2, this.dx));
-      this.dy = Math.max(-2, Math.min(2, this.dy));
-    }
+  mouse.x = event.x;
+  mouse.y = event.y - (header.offsetHeight + nav.offsetHeight);
+}
+
+// Toggle between collect and disperse modes
+function toggleMouseMode() {
+  mouse.mode = mouse.mode === 'collect' ? 'disperse' : 'collect';
+}
+
+// Handle window resize with debounce
+function handleResize() {
+  resizeCanvas();
+  nodes = createNodes(); // Reset node positions
+}
+
+// Handle scroll events for optimization
+function handleScroll() {
+  if (Math.abs(window.scrollY - lastScrollY) > 50) {
+    resizeCanvas();
+    lastScrollY = window.scrollY;
   }
+}
+
+// Resize canvas dimensions
+function resizeCanvas() {
+  const header = document.querySelector('.header');
+  const nav = document.querySelector('nav');
   
-  // Create nodes
-  function createNodes() {
-    let nodes = [];
-    let nodeCount = Math.min(100, Math.floor((canvas.width * canvas.height) / 8000)); // Adjust node count based on screen size
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight - (header.offsetHeight + nav.offsetHeight);
+  canvas.style.top = (header.offsetHeight + nav.offsetHeight) + 'px';
+}
+
+// Node class for particle management
+class Node {
+  constructor(x, y, size) {
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.baseX = x;
+    this.baseY = y;
+    this.dx = (Math.random() * 2) - 1;
+    this.dy = (Math.random() * 2) - 1;
+  }
+
+  draw() {
+    ctx.fillStyle = 'white';
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  update() {
+    // Boundary collision handling
+    this.handleBoundaryCollision();
     
-    for (let i = 0; i < nodeCount; i++) {
-      let size = Math.random() * 1.5 + 0.5; // Random size between 0.5 and 2
-      let x = Math.random() * (canvas.width - size * 2) + size;
-      let y = Math.random() * (canvas.height - size * 2) + size;
-      nodes.push(new Node(x, y, size));
+    // Position update
+    this.x += this.dx;
+    this.y += this.dy;
+
+    // Mouse interaction if mouse position exists
+    if (mouse.x && mouse.y) {
+      this.handleMouseInteraction();
     }
-    return nodes;
+
+    // Add small random movement
+    this.addRandomMovement();
+    
+    // Limit maximum speed
+    this.limitSpeed();
   }
   
-  let nodes = createNodes();
+  handleBoundaryCollision() {
+    if (this.x + this.size > canvas.width || this.x - this.size < 0) {
+      this.dx *= -1;
+    }
+
+    if (this.y + this.size > canvas.height || this.y - this.size < 0) {
+      this.dy *= -1;
+    }
+  }
   
-  // Connect nodes with lines
-  function connectNodes() {
-    for (let a = 0; a < nodes.length; a++) {
-      for (let b = a; b < nodes.length; b++) {
-        let dx = nodes[a].x - nodes[b].x;
-        let dy = nodes[a].y - nodes[b].y;
-        let distance = Math.sqrt(dx * dx + dy * dy);
-        
-        // Max connection distance - scale by screen size
-        let connectionDistance = Math.min(150, canvas.width / 10);
-  
-        if (distance < connectionDistance) {
-          // Opacity based on distance
-          let opacity = 1 - (distance / connectionDistance);
-          ctx.strokeStyle = `rgba(255,255,255,${opacity * 0.2})`;
-          ctx.lineWidth = Math.min(0.8, opacity * 1.5);
-          ctx.beginPath();
-          ctx.moveTo(nodes[a].x, nodes[a].y);
-          ctx.lineTo(nodes[b].x, nodes[b].y);
-          ctx.stroke();
-        }
+  handleMouseInteraction() {
+    let dx, dy, distance, angle, tx, ty;
+    
+    if (mouse.mode === 'collect') {
+      dx = mouse.x - this.x;
+      dy = mouse.y - this.y;
+      distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < mouse.radius) {
+        angle = Math.atan2(dy, dx);
+        tx = mouse.x + Math.cos(angle) * mouse.radius;
+        ty = mouse.y + Math.sin(angle) * mouse.radius;
+
+        this.dx = (tx - this.x) * 0.1;
+        this.dy = (ty - this.y) * 0.1;
+      }
+    } else if (mouse.mode === 'disperse') {
+      dx = this.x - mouse.x;
+      dy = this.y - mouse.y;
+      distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < mouse.radius * 2) {
+        angle = Math.atan2(dy, dx);
+        tx = mouse.x + Math.cos(angle) * (mouse.radius * 2);
+        ty = mouse.y + Math.sin(angle) * (mouse.radius * 2);
+
+        this.dx = (tx - this.x) * 0.1;
+        this.dy = (ty - this.y) * 0.1;
       }
     }
   }
   
-  // Animation loop
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Update and draw all nodes
+  addRandomMovement() {
+    // Ensure the nodes keep moving by adding a small random value
+    this.dx += (Math.random() * 0.1) - 0.05;
+    this.dy += (Math.random() * 0.1) - 0.05;
+  }
+  
+  limitSpeed() {
+    // Prevent excessive speeds
+    this.dx = Math.max(-2, Math.min(2, this.dx));
+    this.dy = Math.max(-2, Math.min(2, this.dy));
+  }
+}
+
+// Create initial nodes
+function createNodes() {
+  let nodesArray = [];
+  let nodeCount = Math.min(100, Math.floor((canvas.width * canvas.height) / 8000)); // Adjust node count based on screen size
+  
+  for (let i = 0; i < nodeCount; i++) {
+    let size = 1;
+    let x = Math.random() * (canvas.width - size * 2) + size;
+    let y = Math.random() * (canvas.height - size * 2) + size;
+    nodesArray.push(new Node(x, y, size));
+  }
+  return nodesArray;
+}
+
+// Connect nodes with lines when close enough
+function connectNodes() {
+  const connectionDistance = Math.min(100, canvas.width / 10);
+  
+  for (let a = 0; a < nodes.length; a++) {
+    for (let b = a; b < nodes.length; b++) {
+      let dx = nodes[a].x - nodes[b].x;
+      let dy = nodes[a].y - nodes[b].y;
+      let distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance < connectionDistance) {
+        // Opacity based on distance
+        let opacity = 1 - (distance / connectionDistance);
+        ctx.strokeStyle = `rgba(255,255,255,${opacity * 0.1})`; // Slightly lower opacity for better performance
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(nodes[a].x, nodes[a].y);
+        ctx.lineTo(nodes[b].x, nodes[b].y);
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+// Animation loop
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // Only update if canvas is visible in viewport
+  const canvasRect = canvas.getBoundingClientRect();
+  if (canvasRect.bottom > 0 && canvasRect.top < window.innerHeight) {
     nodes.forEach(node => {
       node.update();
       node.draw();
     });
-    
-    // Connect nodes with lines
     connectNodes();
-    
-    requestAnimationFrame(animate);
   }
   
-  // Start animation
-  animate();
+  requestAnimationFrame(animate);
+}
+
+// Initialize the particle network
+function initParticleNetwork() {
+  // Create initial nodes
+  nodes = createNodes();
   
-  // Handle window resize - recreate nodes on significant resize
-  let resizeTimeout;
-  window.addEventListener('resize', function() {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(function() {
-      nodes = createNodes(); // Recreate nodes when window is resized
-    }, 200);
-  });
+  // Start animation loop
+  animate();
 }
