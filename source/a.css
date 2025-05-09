@@ -227,21 +227,6 @@
   align-items: center;
   margin: 0;
 }
-/* Tambahkan di file CSS Anda */
-#login-link {
-  padding: 10px;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-}
-
-#login-link:hover {
-  background-color: rgba(255,255,255,0.1);
-}
-
-.g_id_signin {
-  width: 200px !important;
-  height: 40px !important;
-}
 
 
 
