@@ -238,6 +238,11 @@
     z-index: 1;
     pointer-events: none;
 }
+.isi_footer1 {
+    position: relative;
+    clear: both;
+    margin-top: 50px; /* Sesuaikan dengan kebutuhan */
+}
 
 
 
