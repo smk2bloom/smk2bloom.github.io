@@ -46,23 +46,28 @@ function initParticleNetwork() {
   const canvas = document.getElementById('particleCanvas');
   const ctx = canvas.getContext('2d');
   
-  // Set canvas dimensions
   function resizeCanvas() {
-  const header = document.querySelector('.header');
-  const nav = document.querySelector('nav');
-  const footer = document.querySelector('.isi_footer1');
-  
-  // Dapatkan posisi footer relatif terhadap dokumen
-  const footerTop = footer.getBoundingClientRect().top + window.scrollY;
-  
-  // Hitung tinggi canvas yang diinginkan
-  const canvasTop = header.offsetHeight + nav.offsetHeight;
-  const canvasHeight = footerTop - canvasTop;
-
-  // Update dimensi canvas
-  canvas.width = window.innerWidth;
-  canvas.height = Math.max(canvasHeight, 0); // Pastikan tidak negatif
-  canvas.style.top = canvasTop + 'px';
+    const header = document.querySelector('.header');
+    const nav = document.querySelector('nav');
+    const footer = document.querySelector('.isi_footer1');
+    
+    // Dapatkan posisi absolut header dan footer
+    const headerBottom = header.offsetTop + header.offsetHeight + nav.offsetHeight;
+    const footerTop = footer.offsetTop;
+    
+    // Hitung tinggi canvas yang diperlukan
+    const canvasHeight = footerTop - headerBottom;
+    
+    // Update dimensi canvas
+    canvas.width = window.innerWidth;
+    canvas.height = Math.max(canvasHeight, 100); // Minimal 100px
+    canvas.style.top = `${headerBottom}px`;
+    canvas.style.height = `${canvasHeight}px`;
+    
+    // Perbarui posisi mouse
+    const canvasRect = canvas.getBoundingClientRect();
+    canvas.offsetTopGlobal = canvasRect.top + window.scrollY;
+    canvas.offsetLeftGlobal = canvasRect.left + window.scrollX;
 }
 
 // Tambahkan event listener untuk scroll dan resize
