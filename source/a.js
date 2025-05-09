@@ -17,10 +17,7 @@ menuItems.forEach(item => {
   item.addEventListener('focusout', () => {
     item.querySelector('.dropdown').style.display = 'none';
   });
-});
-
-/*// Hapus kode yang di-comment dan ganti dengan ini:
-
+});// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCLql1TJWQG85bagDvZVEQpYukxkvx-P6g",
   authDomain: "smk2bloom.firebaseapp.com",
@@ -34,43 +31,45 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
+// Handle Google Sign-In response
 function handleCredentialResponse(response) {
   const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
   
   firebase.auth().signInWithCredential(credential)
     .then((result) => {
       const user = result.user;
-      document.getElementById('login-link').style.display = 'none';
-      document.getElementById('login-link1').style.display = 'none';
+      document.getElementById('login-container').style.display = 'none';
       document.getElementById('greeting').style.display = 'block';
       document.getElementById('user-name').textContent = user.displayName || user.email.split('@')[0];
     })
     .catch((error) => {
       console.error('Login error:', error);
+      alert('Login failed: ' + error.message);
     });
 }
 
+// Initialize Google Sign-In
 function initializeGoogleSignIn() {
   google.accounts.id.initialize({
-    client_id: '383311108717-1as3os3mejsel4jja9evd6lb9kvbh812.apps.googleusercontent.com', // Ganti dengan Client ID Anda
+    client_id: '383311108717-1as3os3mejsel4jja9evd6lb9kvbh812.apps.googleusercontent.com',
     callback: handleCredentialResponse,
     auto_select: false,
     cancel_on_tap_outside: true
   });
-  
+
   google.accounts.id.renderButton(
     document.getElementById('login-link'),
     {
-      type: 'icon',
-      shape: 'circle',
+      type: 'standard',
       theme: 'filled_blue',
       size: 'medium',
-      text: 'signin_with'
+      text: 'signin_with',
+      shape: 'rectangular'
     }
   );
 }
 
-// Panggil inisialisasi setelah DOM siap
+// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
   initializeGoogleSignIn();
 });
