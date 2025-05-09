@@ -154,3 +154,26 @@ function connectNodes() {
   }
 }
 const menuItems = document.querySelectorAll('.menu-item');*/
+let lastScrollY = 0;
+window.addEventListener('scroll', () => {
+    if (Math.abs(window.scrollY - lastScrollY) > 50) {
+        resizeCanvas();
+        lastScrollY = window.scrollY;
+    }
+});
+// Di dalam fungsi animate():
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Hanya update jika canvas terlihat di viewport
+    const canvasRect = canvas.getBoundingClientRect();
+    if (canvasRect.bottom > 0 && canvasRect.top < window.innerHeight) {
+        nodes.forEach(node => {
+            node.update();
+            node.draw();
+        });
+        connectNodes();
+    }
+    
+    requestAnimationFrame(animate);
+}
