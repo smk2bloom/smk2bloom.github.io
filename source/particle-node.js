@@ -48,14 +48,26 @@ function initParticleNetwork() {
   
   // Set canvas dimensions
   function resizeCanvas() {
-    const header = document.querySelector('.header');
-    const nav = document.querySelector('nav');
-    const footer = document.querySelector('.isi_footer1');
-    
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight - (header.offsetHeight + nav.offsetHeight);
-    canvas.style.top = (header.offsetHeight + nav.offsetHeight) + 'px';
-  }
+  const header = document.querySelector('.header');
+  const nav = document.querySelector('nav');
+  const footer = document.querySelector('.isi_footer1');
+  
+  // Dapatkan posisi footer relatif terhadap dokumen
+  const footerTop = footer.getBoundingClientRect().top + window.scrollY;
+  
+  // Hitung tinggi canvas yang diinginkan
+  const canvasTop = header.offsetHeight + nav.offsetHeight;
+  const canvasHeight = footerTop - canvasTop;
+
+  // Update dimensi canvas
+  canvas.width = window.innerWidth;
+  canvas.height = Math.max(canvasHeight, 0); // Pastikan tidak negatif
+  canvas.style.top = canvasTop + 'px';
+}
+
+// Tambahkan event listener untuk scroll dan resize
+window.addEventListener('scroll', resizeCanvas);
+window.addEventListener('resize', resizeCanvas);
   
   resizeCanvas();
   window.addEventListener('resize', resizeCanvas);
