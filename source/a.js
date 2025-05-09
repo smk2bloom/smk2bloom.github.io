@@ -52,7 +52,7 @@ function handleCredentialResponse(response) {
 
 function initializeGoogleSignIn() {
   google.accounts.id.initialize({
-    client_id: 'YOUR_GOOGLE_CLIENT_ID', // Ganti dengan Client ID Anda
+    client_id: '383311108717-1as3os3mejsel4jja9evd6lb9kvbh812.apps.googleusercontent.com', // Ganti dengan Client ID Anda
     callback: handleCredentialResponse,
     auto_select: false,
     cancel_on_tap_outside: true
